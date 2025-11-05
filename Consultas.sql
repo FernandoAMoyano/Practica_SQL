@@ -50,3 +50,69 @@ FROM estudiantes
 WHERE activo = TRUE
 ORDER BY promedio DESC
 LIMIT 5;
+
+-- ¿Cuántos estudiantes activos hay en total?
+
+SELECT COUNT(*) AS total_estudiantes_activos
+FROM estudiantes
+WHERE activo = TRUE;
+
+-- Calcula el promedio general de todos los estudiantes activos.
+
+SELECT 
+    AVG(promedio) AS promedio_general,
+    ROUND(AVG(promedio), 2) AS promedio_redondeado
+FROM estudiantes
+WHERE activo = TRUE;
+
+-- Encuentra el salario mínimo y máximo de los profesores.
+
+SELECT 
+    MIN(salario) AS salario_minimo,
+    MAX(salario) AS salario_maximo,
+    MAX(salario) - MIN(salario) AS diferencia
+FROM profesores;
+
+-- Cuenta cuántos estudiantes hay por edad.
+
+SELECT 
+    edad,
+    COUNT(*) AS cantidad_estudiantes
+FROM estudiantes
+WHERE activo = TRUE
+GROUP BY edad
+ORDER BY edad;
+
+-- Muestra por departamento: cantidad de cursos, créditos totales y precio promedio.
+
+SELECT 
+    departamento,
+    COUNT(*) AS cantidad_cursos,
+    SUM(creditos) AS creditos_totales,
+    AVG(precio) AS precio_promedio,
+    MIN(precio) AS precio_minimo,
+    MAX(precio) AS precio_maximo
+FROM cursos
+GROUP BY departamento
+ORDER BY cantidad_cursos DESC;
+
+-- Muestra las edades que tienen más de 2 estudiantes.
+
+SELECT 
+    edad,
+    COUNT(*) AS cantidad
+FROM estudiantes
+WHERE activo = TRUE
+GROUP BY edad
+HAVING COUNT(*) > 2
+ORDER BY cantidad DESC;
+
+-- Muestra nombre completo e email de estudiantes en un solo campo.
+
+SELECT 
+    CONCAT(nombre, ' ', apellido) AS nombre_completo,
+    email,
+    CONCAT(nombre, ' (', email, ')') AS info_completa
+FROM estudiantes
+WHERE activo = TRUE
+ORDER BY apellido;
