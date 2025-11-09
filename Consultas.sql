@@ -116,3 +116,39 @@ SELECT
 FROM estudiantes
 WHERE activo = TRUE
 ORDER BY apellido;
+
+-- Muestra las fechas de ingreso en formato "DD/MM/YYYY".
+SELECT 
+    nombre,
+    apellido,
+    fecha_ingreso,
+    DATE_FORMAT(fecha_ingreso, '%d/%m/%Y') AS fecha_formateada,
+    DATE_FORMAT(fecha_ingreso, '%d de %M de %Y') AS fecha_texto
+FROM estudiantes
+ORDER BY fecha_ingreso DESC;
+
+-- Calcula cuántos días han pasado desde el ingreso de cada estudiante.
+SELECT 
+    nombre,
+    apellido,
+    fecha_ingreso,
+    DATEDIFF(CURDATE(), fecha_ingreso) AS dias_desde_ingreso,
+    ROUND(DATEDIFF(CURDATE(), fecha_ingreso) / 365, 1) AS años_aproximados
+FROM estudiantes
+WHERE activo = TRUE
+ORDER BY dias_desde_ingreso DESC;
+
+-- Clasifica a los estudiantes según su promedio: Excelente (≥9), Bueno (7-8.9), Regular (6-6.9), Bajo (<6).
+SELECT 
+    nombre,
+    apellido,
+    promedio,
+    CASE 
+        WHEN promedio >= 9.0 THEN 'Excelente'
+        WHEN promedio >= 7.0 THEN 'Bueno'
+        WHEN promedio >= 6.0 THEN 'Regular'
+        ELSE 'Bajo'
+    END AS clasificacion
+FROM estudiantes
+WHERE activo = TRUE
+ORDER BY promedio DESC;
