@@ -152,3 +152,16 @@ SELECT
 FROM estudiantes
 WHERE activo = TRUE
 ORDER BY promedio DESC;
+
+
+-- Lista todas las inscripciones mostrando nombre del estudiante y nombre del curso.
+SELECT 
+    e.nombre AS estudiante,
+    e.apellido,
+    c.nombre AS curso,
+    i.nota,
+    i.estado
+FROM inscripciones i
+INNER JOIN estudiantes e ON i.estudiante_id = e.id
+INNER JOIN cursos c ON i.curso_id = c.id
+ORDER BY e.apellido, c.nombre;
