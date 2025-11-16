@@ -51,6 +51,11 @@ WHERE activo = TRUE
 ORDER BY promedio DESC
 LIMIT 5;
 
+---------------------------------------------------------------
+-- FUNCIONES Y AGREGACIONES
+---------------------------------------------------------------
+
+
 -- ¿Cuántos estudiantes activos hay en total?
 
 SELECT COUNT(*) AS total_estudiantes_activos
@@ -154,6 +159,10 @@ WHERE activo = TRUE
 ORDER BY promedio DESC;
 
 
+---------------------------------------------------------------
+-- JOINS Y SUBCONSULTAS
+---------------------------------------------------------------
+
 -- Lista todas las inscripciones mostrando nombre del estudiante y nombre del curso.
 SELECT 
     e.nombre AS estudiante,
@@ -165,3 +174,14 @@ FROM inscripciones i
 INNER JOIN estudiantes e ON i.estudiante_id = e.id
 INNER JOIN cursos c ON i.curso_id = c.id
 ORDER BY e.apellido, c.nombre;
+
+
+-- Encuentra estudiantes que NO están inscritos en ningún curso.
+SELECT 
+    e.id,
+    e.nombre,
+    e.apellido,
+    e.email
+FROM estudiantes e
+LEFT JOIN inscripciones i ON e.id = i.estudiante_id
+WHERE i.id IS NULL AND e.activo = TRUE;
