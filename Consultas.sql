@@ -200,3 +200,16 @@ LEFT JOIN inscripciones i ON e.id = i.estudiante_id
 WHERE e.activo = TRUE
 GROUP BY e.id, e.nombre, e.apellido
 ORDER BY promedio_notas DESC;
+
+
+-- Encuentra estudiantes con promedio mayor al promedio general.
+SELECT 
+    nombre,
+    apellido,
+    promedio,
+    (SELECT AVG(promedio) FROM estudiantes WHERE activo = TRUE) AS promedio_general,
+    promedio - (SELECT AVG(promedio) FROM estudiantes WHERE activo = TRUE) AS diferencia
+FROM estudiantes
+WHERE activo = TRUE
+  AND promedio > (SELECT AVG(promedio) FROM estudiantes WHERE activo = TRUE)
+ORDER BY promedio DESC;
