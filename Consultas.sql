@@ -185,3 +185,18 @@ SELECT
 FROM estudiantes e
 LEFT JOIN inscripciones i ON e.id = i.estudiante_id
 WHERE i.id IS NULL AND e.activo = TRUE;
+
+
+-- Muestra cada estudiante con la cantidad de cursos y su promedio de notas.
+SELECT 
+    e.nombre,
+    e.apellido,
+    COUNT(i.id) AS total_cursos,
+    COUNT(i.nota) AS cursos_con_nota,
+    AVG(i.nota) AS promedio_notas,
+    ROUND(AVG(i.nota), 2) AS promedio_redondeado
+FROM estudiantes e
+LEFT JOIN inscripciones i ON e.id = i.estudiante_id
+WHERE e.activo = TRUE
+GROUP BY e.id, e.nombre, e.apellido
+ORDER BY promedio_notas DESC;
