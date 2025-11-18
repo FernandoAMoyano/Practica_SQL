@@ -213,3 +213,18 @@ FROM estudiantes
 WHERE activo = TRUE
   AND promedio > (SELECT AVG(promedio) FROM estudiantes WHERE activo = TRUE)
 ORDER BY promedio DESC;
+
+
+-- Encuentra estudiantes inscritos en cursos del departamento de Informática.
+SELECT DISTINCT
+    e.nombre,
+    e.apellido,
+    e.email
+FROM estudiantes e
+WHERE e.id IN (
+    SELECT i.estudiante_id
+    FROM inscripciones i
+    INNER JOIN cursos c ON i.curso_id = c.id
+    WHERE c.departamento = 'Informática'
+)
+ORDER BY e.apellido;
