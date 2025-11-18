@@ -297,3 +297,20 @@ INNER JOIN cursos c ON i.curso_id = c.id
 WHERE i.nota IS NOT NULL
 HAVING ranking <= 3
 ORDER BY c.nombre, ranking;
+
+
+-- Lista profesores con sus cursos y cantidad de estudiantes inscritos.
+SELECT 
+    p.nombre AS profesor,
+    p.apellido,
+    p.especialidad,
+    c.nombre AS curso,
+    cp.anio,
+    cp.semestre,
+    COUNT(i.id) AS total_inscritos
+FROM profesores p
+INNER JOIN curso_profesor cp ON p.id = cp.profesor_id
+INNER JOIN cursos c ON cp.curso_id = c.id
+LEFT JOIN inscripciones i ON c.id = i.curso_id
+GROUP BY p.id, p.nombre, p.apellido, p.especialidad, c.nombre, cp.anio, cp.semestre
+ORDER BY p.apellido, total_inscritos DESC;
