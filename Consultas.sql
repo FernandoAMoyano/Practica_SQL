@@ -314,3 +314,19 @@ INNER JOIN cursos c ON cp.curso_id = c.id
 LEFT JOIN inscripciones i ON c.id = i.curso_id
 GROUP BY p.id, p.nombre, p.apellido, p.especialidad, c.nombre, cp.anio, cp.semestre
 ORDER BY p.apellido, total_inscritos DESC;
+
+
+-- Muestra los préstamos con multa y calcula cuántos días de retraso tuvo cada uno.
+SELECT 
+    e.nombre AS estudiante,
+    l.titulo AS libro,
+    p.fecha_prestamo,
+    p.fecha_devolucion_esperada,
+    p.fecha_devolucion_real,
+    DATEDIFF(p.fecha_devolucion_real, p.fecha_devolucion_esperada) AS dias_retraso,
+    p.multa
+FROM prestamos p
+INNER JOIN estudiantes e ON p.estudiante_id = e.id
+INNER JOIN libros l ON p.libro_id = l.id
+WHERE p.multa > 0
+ORDER BY p.multa DESC;
