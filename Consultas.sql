@@ -228,3 +228,30 @@ WHERE e.id IN (
     WHERE c.departamento = 'Informática'
 )
 ORDER BY e.apellido;
+
+-- Lista cursos que tienen al menos una inscripción.
+SELECT 
+    c.nombre,
+    c.codigo,
+    c.departamento
+FROM cursos c
+WHERE EXISTS (
+    SELECT 1
+    FROM inscripciones i
+    WHERE i.curso_id = c.id
+)
+ORDER BY c.nombre;
+
+-- Encuentra cursos SIN ninguna inscripción.
+SELECT 
+    c.nombre,
+    c.codigo,
+    c.departamento,
+    c.cupo_maximo
+FROM cursos c
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM inscripciones i
+    WHERE i.curso_id = c.id
+)
+ORDER BY c.departamento, c.nombre;
