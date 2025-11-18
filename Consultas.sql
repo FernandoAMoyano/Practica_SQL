@@ -229,6 +229,7 @@ WHERE e.id IN (
 )
 ORDER BY e.apellido;
 
+
 -- Lista cursos que tienen al menos una inscripción.
 SELECT 
     c.nombre,
@@ -241,6 +242,7 @@ WHERE EXISTS (
     WHERE i.curso_id = c.id
 )
 ORDER BY c.nombre;
+
 
 -- Encuentra cursos SIN ninguna inscripción.
 SELECT 
@@ -255,3 +257,43 @@ WHERE NOT EXISTS (
     WHERE i.curso_id = c.id
 )
 ORDER BY c.departamento, c.nombre;
+
+
+-- Muestra los 3 mejores estudiantes de cada curso (que tenga notas).
+SELECT 
+    c.nombre AS curso,
+    e.nombre AS estudiante,
+    e.apellido,
+    i.nota
+FROM inscripciones i
+INNER JOIN estudiantes e ON i.estudiante_id = e.id
+INNER JOIN cursos c ON i.curso_id = c.id
+WHERE i.nota IS NOT NULL
+  AND i.nota >= (
+    SELECT MIN(nota)
+    FROM (
+        SELECT nota
+        FROM inscripciones i2
+        WHERE i2.curso_id = i.curso_id AND i2.nota IS NOT NULL
+        ORDER BY nota DESC
+        LIMIT 3
+    ) AS top3
+  )
+ORDER BY c.nombre, i.nota DESC;
+
+
+-- Alternativa mas simple
+SELECT 
+    c.nombre AS curso,
+    e.nombre AS estudiante,
+    i.nota,
+    (SELECT COUNT(*) 
+     FROM inscripciones i2 
+     WHERE i2.curso_id = i.curso_id 
+       AND i2.nota > i.nota) + 1 AS ranking
+FROM inscripciones i
+INNER JOIN estudiantes e ON i.estudiante_id = e.id
+INNER JOIN cursos c ON i.curso_id = c.id
+WHERE i.nota IS NOT NULL
+HAVING ranking <= 3
+ORDER BY c.nombre, ranking;
