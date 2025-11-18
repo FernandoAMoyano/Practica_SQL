@@ -330,3 +330,19 @@ INNER JOIN estudiantes e ON p.estudiante_id = e.id
 INNER JOIN libros l ON p.libro_id = l.id
 WHERE p.multa > 0
 ORDER BY p.multa DESC;
+
+
+-- Lista cursos con su precio y la diferencia respecto al precio promedio
+SELECT 
+    nombre,
+    codigo,
+    precio,
+    (SELECT AVG(precio) FROM cursos) AS precio_promedio,
+    precio - (SELECT AVG(precio) FROM cursos) AS diferencia,
+    CASE 
+        WHEN precio > (SELECT AVG(precio) FROM cursos) THEN 'Más caro'
+        WHEN precio < (SELECT AVG(precio) FROM cursos) THEN 'Más barato'
+        ELSE 'Promedio'
+    END AS clasificacion
+FROM cursos
+ORDER BY diferencia DESC;
